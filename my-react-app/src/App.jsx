@@ -1,5 +1,6 @@
 // import { useState } from 'react'
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
+import { ErrorBoundary } from 'react-error-boundary'
 import { ThemeProvider, useTheme } from './state/ThemeContext';
 // import reactLogo from './assets/react.svg'
 
@@ -13,6 +14,7 @@ import NotFound from './pages/NotFound';
 import './App.css'
 const ChildComponent = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+  // throw new Error("Oops! An error occured!");
   return (
     <div style={{ background: isDarkMode ? "#333" : "#FFF", color: isDarkMode ? "#FFF" : "#000" }}>
       <h1>{isDarkMode ? "Dark Mode" : "Light Mode"}</h1>
@@ -32,12 +34,25 @@ const ChildComponent = () => {
   );
 };
 
+const fallbackRender = ({ error, resetErrorBoundary }) => {
+  // resetErrorBoundary();
+  return (
+    <div role="alert">
+      <p>Something went wrong!</p>
+      <pre style={{color: "red"}}>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Reset</button>
+    </div>
+  )
+}
+
 function App() {
   // const [count, setCount] = useState(0)
 
   return (
     <ThemeProvider>
-      <ChildComponent />
+      <ErrorBoundary fallbackRender={fallbackRender}>
+        <ChildComponent />
+      </ErrorBoundary>
       {/* <div style={{ background: isDarkMode ? "#333" : "#FFF", color: isDarkMode ? "#FFF" : "#000" }}>
         <h1>{isDarkMode ? "Dark Mode" : "Light Mode"}</h1>
         <button onClick={toggleTheme}>Toggle Theme</button>

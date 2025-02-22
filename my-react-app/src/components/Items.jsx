@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 
 const items = ["Apple", "Banana", "Cherry"];
 
@@ -13,12 +14,16 @@ const DisplayItems = () => {
     lastName: "",
     email: ""
   });
+  const showBoundary = useErrorBoundary();
 
   useEffect(() => {
     fetch("https://jsonplaceholder.typicode.com/posts")
       .then(response => response.json())
       .then(data => setPosts(data))
-      .catch(error => alert(error.message));
+      .catch(error => {
+        alert(error.message);
+        showBoundary(error.message);
+      });
   }, []);
 
   const handleSubmit = (e) => {
