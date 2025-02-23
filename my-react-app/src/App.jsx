@@ -2,6 +2,10 @@
 import { BrowserRouter as Router, Link, Routes, Route } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary'
 import { ThemeProvider, useTheme } from './state/ThemeContext';
+import PrivateRoute from './components/PrivateRoute';
+import { AuthProvider } from './state/AuthContext';
+import Login from './pages/Login';
+import OAuthCallback from './pages/OAuthCallback';
 // import reactLogo from './assets/react.svg'
 
 import Home from './pages/Home';
@@ -19,17 +23,26 @@ const ChildComponent = () => {
     <div style={{ background: isDarkMode ? "#333" : "#FFF", color: isDarkMode ? "#FFF" : "#000" }}>
       <h1>{isDarkMode ? "Dark Mode" : "Light Mode"}</h1>
       <button onClick={toggleTheme}>Toggle Theme</button>
-      <Router>
-        <nav>
-          <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/contact">Contact</Link>
-        </nav>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <nav>
+            <Link to="/">Home</Link> | <Link to="/about">About</Link> | <Link to="/contact">Contact</Link>
+          </nav>
+          <Routes>
+            <Route path="/" element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/callback" element={<OAuthCallback />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 };
