@@ -1,7 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  movies: []
+  movies: [
+    {
+      id: 1,
+      name: "Intersteller"
+    },
+    {
+      id: 2,
+      name: "Spectre"
+    }
+  ]
 }
 
 const movieSlice = createSlice({
@@ -10,9 +19,15 @@ const movieSlice = createSlice({
   reducers: {
     // addMovie and removeMovie are actions to interact with state
     addMovie: (state, action) => {
-      state.movies.push(action.payload);
+      const newMovie = {
+        id: state.movies.length + 1,
+        name: action.payload
+      }
+      state.movies.push(newMovie);
     },
-    removeMovie: (state, action) => {}
+    removeMovie: (state, action) => {
+      state.movies = state.movies.filter((movie) => movie.id !== action.payload);
+    }
   }
 });
 

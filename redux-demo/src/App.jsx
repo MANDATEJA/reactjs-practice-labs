@@ -1,9 +1,14 @@
-import './App.css'
+import MovieInput from './components/MovieInput';
+import MovieList from './components/MovieList';
+import './App.css';
+
 
 function App() {
 
   return (
     <>
+      <MovieInput />
+      <MovieList />
     </>
   )
 }
